@@ -29,7 +29,113 @@ public class SimpleTweenEngine : MonoBehaviour
 
     void RunCoroutine()
     {
-        StartCoroutine(EaseInOutExpo());
+        StartCoroutine(EaseInOutSine());
+    }
+
+    //--------------------Sine--------------------//
+    IEnumerator EaseInSine()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1- Mathf.Cos((pastTime * Mathf.PI) / 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutSine()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = Mathf.Sin((pastTime * Mathf.PI) / 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutSine()
+    {
+        pastTime = 0f;
+        val = 0f;
+
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = (Mathf.Cos(Mathf.PI * pastTime) - 1) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.position = lastPosition + new Vector3(0, 0, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        lastPosition = transform.position;
+
+        yield return null;
+    }
+
+
+    //--------------------Quad--------------------//
+    IEnumerator EaseInQuad()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = Mathf.Pow(pastTime, 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutQuad()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1 - Mathf.Pow(1 - pastTime, 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
     }
 
     IEnumerator EaseInOutQuad()
@@ -52,6 +158,195 @@ public class SimpleTweenEngine : MonoBehaviour
         yield return null;
     }
 
+
+    //--------------------Cubic--------------------//
+    IEnumerator EaseInCubic()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = Mathf.Pow(pastTime, 3);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutCubic()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1 - Mathf.Pow(1 - pastTime, 3);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutCubic()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = pastTime < 0.5f ? 4 * Mathf.Pow(pastTime, 3) : 1 - Mathf.Pow(-2 * pastTime + 2, 3) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+
+    //--------------------Quart--------------------//
+    IEnumerator EaseInQuart()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = Mathf.Pow(pastTime, 4);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutQuart()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1 - Mathf.Pow(1 - pastTime, 4);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutQuart()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = pastTime < 0.5f ? 8 * Mathf.Pow(pastTime, 4) : 1 - Mathf.Pow(-2 * pastTime + 2, 4) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+
+    //--------------------Quint--------------------//
+    IEnumerator EaseInQuint()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = Mathf.Pow(pastTime, 5);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutQuint()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1 - Mathf.Pow(1 - pastTime, 5);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutQuint()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = pastTime < 0.5f ? 16 * Mathf.Pow(pastTime, 5) : 1 - Mathf.Pow(-2 * pastTime + 2, 5) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+
+
+    //--------------------Circ--------------------//
     IEnumerator EaseOutCirc()
     {
         while (pastTime < duration)
@@ -72,6 +367,8 @@ public class SimpleTweenEngine : MonoBehaviour
         yield return null;
     }
 
+
+    //--------------------Back--------------------//
     IEnumerator EaseInBack()
     {
         while (pastTime < duration)
@@ -92,6 +389,8 @@ public class SimpleTweenEngine : MonoBehaviour
         yield return null;
     }
 
+
+    //--------------------Expo--------------------//
     IEnumerator EaseInOutExpo()
     {
         lastPosition = transform.position;
@@ -116,4 +415,11 @@ public class SimpleTweenEngine : MonoBehaviour
 
         yield return null;
     }
+
+
+    //--------------------Elastic--------------------//
+
+
+    //--------------------Bounce--------------------//
+
 }
