@@ -7,7 +7,9 @@ using UnityEngine.UIElements;
 public class SimpleTweenEngine : MonoBehaviour
 {
     const float c1 = 1.70158f;
+    const float c2 = c1 * 1.525f;
     const float c3 = c1 + 1f;
+    const float c4 = (2.0f * Mathf.PI) / 3.0f;
 
     float startTime = 0.0f;
 
@@ -22,6 +24,8 @@ public class SimpleTweenEngine : MonoBehaviour
 
     Vector3 lastPosition = default;
 
+    [SerializeField] AnimationCurve curve = null;
+
     void Start()
     {
         InvokeRepeating("RunCoroutine", 1.0f, 1.5f);
@@ -29,17 +33,15 @@ public class SimpleTweenEngine : MonoBehaviour
 
     void RunCoroutine()
     {
-        StartCoroutine(EaseInOutSine());
+        StartCoroutine(EaseOutElastic());
     }
 
-    //--------------------Sine--------------------//
-    IEnumerator EaseInSine()
+    //--------------------Linear--------------------//
+    IEnumerator EaseLinear()
     {
         while (pastTime < duration)
         {
-            fbrC++;
-
-            val = 1- Mathf.Cos((pastTime * Mathf.PI) / 2);
+            val = pastTime;
 
             pastTime += Time.deltaTime;
 
@@ -53,13 +55,14 @@ public class SimpleTweenEngine : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator EaseOutSine()
+    //--------------------Custom--------------------//
+    IEnumerator EaseCustom()
     {
         while (pastTime < duration)
         {
             fbrC++;
 
-            val = Mathf.Sin((pastTime * Mathf.PI) / 2);
+            val = curve.Evaluate(pastTime);
 
             pastTime += Time.deltaTime;
 
@@ -72,30 +75,6 @@ public class SimpleTweenEngine : MonoBehaviour
 
         yield return null;
     }
-
-    IEnumerator EaseInOutSine()
-    {
-        pastTime = 0f;
-        val = 0f;
-
-        while (pastTime < duration)
-        {
-            fbrC++;
-
-            val = (Mathf.Cos(Mathf.PI * pastTime) - 1) / 2;
-
-            pastTime += Time.deltaTime;
-
-            transform.position = lastPosition + new Vector3(0, 0, val);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        lastPosition = transform.position;
-
-        yield return null;
-    }
-
 
     //--------------------Quad--------------------//
     IEnumerator EaseInQuad()
@@ -345,52 +324,45 @@ public class SimpleTweenEngine : MonoBehaviour
     }
 
 
-
-    //--------------------Circ--------------------//
-    IEnumerator EaseOutCirc()
-    {
-        while (pastTime < duration)
-        {
-            fbrC++;
-
-            val = Mathf.Sqrt(1 - Mathf.Pow(pastTime - 1, 2));
-
-            pastTime += Time.deltaTime;
-
-            transform.localScale = new Vector3(val, val, val);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        transform.localScale = Vector3.one;
-
-        yield return null;
-    }
-
-
-    //--------------------Back--------------------//
-    IEnumerator EaseInBack()
-    {
-        while (pastTime < duration)
-        {
-            fbrC++;
-
-            val = c3 * Mathf.Pow(pastTime, 3) - c1 * Mathf.Pow(pastTime, 2);
-
-            pastTime += Time.deltaTime;
-
-            transform.localScale = new Vector3(val, val, val);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        transform.localScale = Vector3.one;
-
-        yield return null;
-    }
-
-
     //--------------------Expo--------------------//
+    IEnumerator EaseInExpo()
+    {
+        while (pastTime < duration)
+        {
+            val = Mathf.Pow(2, 10 * pastTime - 10);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutExpo()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = 1 - Mathf.Pow(2, -10 * pastTime);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
     IEnumerator EaseInOutExpo()
     {
         lastPosition = transform.position;
@@ -417,9 +389,237 @@ public class SimpleTweenEngine : MonoBehaviour
     }
 
 
-    //--------------------Elastic--------------------//
+    //--------------------Circ--------------------//
+    IEnumerator EaseInCirc()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
 
+            val = 1 - Mathf.Sqrt(1 - Mathf.Pow(pastTime, 2));
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutCirc()
+    {
+        while (pastTime < duration)
+        {
+            val = Mathf.Sqrt(1 - Mathf.Pow(pastTime - 1, 2));
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutCirc()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = pastTime < 0.5f ? (1 - Mathf.Sqrt(1 - Mathf.Pow(2 * pastTime, 2))) / 2 :
+                (Mathf.Sqrt(1 - Mathf.Pow(-2 * pastTime + 2, 2)) + 1) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    //--------------------Back--------------------//
+    IEnumerator EaseInBack()
+    {
+        while (pastTime < duration)
+        {
+            fbrC++;
+
+            val = c3 * Mathf.Pow(pastTime, 3) - c1 * Mathf.Pow(pastTime, 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutBack()
+    {
+        while (pastTime < duration)
+        {
+            val = 1 + c3 * Mathf.Pow(pastTime - 1, 3) + c1 * Mathf.Pow(pastTime - 1, 2);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseIntOutBack()
+    {
+        while (pastTime < duration)
+        {
+            val = pastTime < 0.5f ?
+                (Mathf.Pow(2 * pastTime, 2) * ((c2 + 1) * 2 * pastTime - c2)) / 2:
+                (Mathf.Pow(2 * pastTime - 2, 2) * ((c2 + 1) * (pastTime * 2 - 2) + c2) + 2) / 2;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+
+    //--------------------Elastic--------------------//
+    IEnumerator EaseInElastic()
+    {
+        while (pastTime < duration)
+        {
+            val = -Mathf.Pow(2, 10 * pastTime - 10) * Mathf.Sin((pastTime * 10 - 10.75f) * c4);
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutElastic()
+    {
+        pastTime = 0.0f;
+        val = 0.0f;
+        Vector3 lastPos = transform.position;
+
+        while (pastTime < duration)
+        {
+            val = Mathf.Pow(2, -10 * pastTime) * Mathf.Sin((10 * pastTime - 0.75f) * c4) + 1;
+
+            pastTime += Time.deltaTime;
+
+            transform.position = lastPos + new Vector3(0, 0, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutElastic()
+    {
+        while (pastTime < duration)
+        {
+            //val = ;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
 
     //--------------------Bounce--------------------//
+    IEnumerator EaseInBounce()
+    {
+        while (pastTime < duration)
+        {
+            //val = ;
 
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseOutBounce()
+    {
+        while (pastTime < duration)
+        {
+            //val = ;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    IEnumerator EaseInOutBounce()
+    {
+        while (pastTime < duration)
+        {
+            //val = ;
+
+            pastTime += Time.deltaTime;
+
+            transform.localScale = new Vector3(val, val, val);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        transform.localScale = Vector3.one;
+
+        yield return null;
+    }
+
+    
 }
