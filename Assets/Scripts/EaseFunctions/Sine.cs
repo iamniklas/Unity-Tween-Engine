@@ -12,26 +12,29 @@ namespace Ease
         {
             float pastTime = 0.0f, val = 0.0f;
 
-            //while (pastTime < duration)
-            //{
-            //    val = 1 - Mathf.Cos((pastTime * Mathf.PI) / 2);
-            //
-            //    pastTime += Time.deltaTime;
-            //
-            //    Sack.Invoke(val);
-            //
-            //    //transform.localScale = new Vector3(val, val, val);
-            //
-            //    yield return new WaitForEndOfFrame();
-            //}
-            //
-            //transform.localScale = Vector3.one;
+            while (pastTime < duration)
+            {
+                val = 1 - Mathf.Cos((pastTime * Mathf.PI) / 2);
+            
+                pastTime += Time.deltaTime;
+            
+                Sack.Invoke(val);
+            
+                //transform.localScale = new Vector3(val, val, val);
+            
+                yield return new WaitForEndOfFrame();
+            }
+
+            //val = 1.0f;
+            //transform.position = lastPosition + new Vector3(0, 0, val);
 
             yield return null;
         }
 
         static IEnumerator EaseOutSine()
         {
+            float pastTime = 0.0f, val = 0.0f;
+
             //while (pastTime < duration)
             //{
             //    val = Mathf.Sin((pastTime * Mathf.PI) / 2);
@@ -43,19 +46,19 @@ namespace Ease
             //    yield return new WaitForEndOfFrame();
             //}
             //
-            //transform.localScale = Vector3.one;
+            //val = 1.0f;
+            //transform.position = lastPosition + new Vector3(0, 0, val);
 
             yield return null;
         }
 
         static IEnumerator EaseInOutSine()
         {
-            //pastTime = 0f;
-            //val = 0f;
-            //
+            float pastTime = 0.0f, val = 0.0f;
+
             //while (pastTime < duration)
             //{
-            //    val = (Mathf.Cos(Mathf.PI * pastTime) - 1) / 2;
+            //    val = -(Mathf.Cos(Mathf.PI * pastTime) - 1) / 2;
             //
             //    pastTime += Time.deltaTime;
             //
@@ -63,8 +66,9 @@ namespace Ease
             //
             //    yield return new WaitForEndOfFrame();
             //}
-            //
-            //lastPosition = transform.position;
+
+            //val = 1.0f;
+            //transform.position = lastPosition + new Vector3(0, 0, val);
 
             yield return null;
         }
