@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class TweenCore : MonoBehaviour
 {
-    private List<TweenOperation> TweenOperations = new List<TweenOperation>();
+    private static List<TweenOperation> TweenOperations = new List<TweenOperation>();
+
+    float updateInterval = 0.015f;
 
     void Start()
     {
@@ -13,25 +15,29 @@ public class TweenCore : MonoBehaviour
 
         LeanTween.value(0.0f, 1.0f, 1.0f);
 
-        //Instantiate(this);
-        //DontDestroyOnLoad(this);
+        StartCoroutine(TweenUpdate());
     }
 
-    void FixedUpdate()
+    IEnumerator TweenUpdate()
     {
-        TweenUpdate();
-    }
-
-    private void TweenUpdate()
-    {
-        foreach (TweenOperation operation in TweenOperations)
+        while (true)
         {
-            operation.OperationUpdate();
+            for (int i = 0; i < TweenOperations.Count; i++)
+            {
+                TweenOperations[i].OperationUpdate();
+            }
+
+            yield return new WaitForSecondsRealtime(updateInterval);
         }
     }
 
-    public static void AddNewOperation()
+    public static void AddNewOperation(TweenOperation _newOperation)
     {
+        TweenOperations.Add(_newOperation);
+    }
 
+    public static void RemOperation(TweenOperation _operation)
+    {
+        TweenOperations.Remove(_operation);
     }
 }
