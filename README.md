@@ -15,6 +15,7 @@ Available interpolations are:
 - **Elastic**
 - **Bounce**
 - **Custom** (Custom interpolation with user-set bezier curve)
+
 All interpolations except Linear and Custom provide the 3 common types (In, Out, InOut).
 
 To create a new * *Tween Operation* * the following code is required:
