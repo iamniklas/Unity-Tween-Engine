@@ -18,7 +18,7 @@ Available interpolations are:
 
 All interpolations except Linear and Custom provide the 3 common types (In, Out, InOut).
 
-To create a new * *Tween Operation* * the following code is required:
+To create a new *Tween Operation* the following code is required:
 
 ```
 TweenOperation operation = new TweenOperation();
