@@ -26,7 +26,7 @@ operation.SetDuration(1.0f);
 operation.SetInterpolation(SimpleTweenEngine.InterpolationType.EaseInOutSine);
 ```
 
-The following methods are used for ** callbacks **:
+The following methods are used for tween **callbacks**:
 ```
 operation.RegisterTweenStartCallback(Action callback);
 operation.RegisterTweenUpdateCallback(Action <float> callback);
